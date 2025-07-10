@@ -1,0 +1,41 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<unistd.h>
+unsigned char a[1000];
+int size = 0;
+void gen_data(){
+    int n = rand()%6; //random from 0-5
+    for(int i=0;i<n;i++){
+        a[size++] = rand()%256; //random value between 0-255
+    }
+    printf("Generating %d byte of data - Total size = %d bytes",n,size);
+    // for(int i=0;i<size;i++){
+    //     printf("%d ",a[i]);
+    // }
+    printf("\n");
+}
+void print_data(){
+    if(size>=50){
+        printf("Size greater than 50 bytes, printing the latest 50 bytes\n");
+        for(int i = size - 50; i < size; i++){ 
+            printf("%02X ",a[i]);
+        }
+        size=size-50; //reducing buffer size
+        printf("\n");
+    }
+    else{
+        printf("Size is less than 50 bytes, wait another 10 seconds\n");
+    }
+}
+int main(){
+    int s = 0;
+    while(1){
+        sleep(1); //1 second delay to generate random bytes
+        s++;
+        gen_data();
+        
+        if(s%10==0){ //every 10 second
+            print_data();
+        }
+    }
+}
